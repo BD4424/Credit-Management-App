@@ -1,0 +1,25 @@
+<div class="container">
+  <h2>Add New Customer</h2>
+
+  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <label>Name:</label>
+    <input type="text" formControlName="name">
+    <div *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched">
+      <small>Name is required.</small>
+    </div>
+
+    <label>Phone Number:</label>
+    <input type="text" formControlName="phoneNo">
+    <div *ngIf="customerForm.get('phoneNo')?.invalid && customerForm.get('phoneNo')?.touched">
+      <small>Enter a valid 10-digit number.</small>
+    </div>
+
+    <label>Email:</label>
+    <input type="email" formControlName="email">
+    <div *ngIf="customerForm.get('email')?.invalid && customerForm.get('email')?.touched">
+      <small>Enter a valid email.</small>
+    </div>
+
+    <button type="submit" [disabled]="customerForm.invalid">Add Customer</button>
+  </form>
+</div>

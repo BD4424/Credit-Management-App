@@ -1,0 +1,24 @@
+<div class="container">
+  <h2>Customer List</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let customer of customers">
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.phoneNo }}</td>
+        <td>{{ customer.email }}</td>
+        <td>
+          <button (click)="viewTransactions(customer.id)">View Transactions</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

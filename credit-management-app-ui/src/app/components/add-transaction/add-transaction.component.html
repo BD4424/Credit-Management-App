@@ -1,0 +1,31 @@
+<div class="container">
+    <h2>Add Transaction</h2>
+
+    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+      <label>Item Name:</label>
+      <input type="text" formControlName="itemName">
+      <div *ngIf="transactionForm.get('itemName')?.invalid && transactionForm.get('itemName')?.touched">
+        <small>Item name is required.</small>
+      </div>
+
+      <label>Quantity:</label>
+      <input type="text" formControlName="quantity">
+      <div *ngIf="transactionForm.get('quantity')?.invalid && transactionForm.get('quantity')?.touched">
+        <small>Enter a valid quantity.</small>
+      </div>
+
+      <label>Amount:</label>
+      <input type="text" formControlName="amount">
+      <div *ngIf="transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched">
+        <small>Amount is required and should be a valid number.</small>
+      </div>
+
+      <label>Status:</label>
+      <select formControlName="status">
+        <option value="PENDING">PENDING</option>
+        <option value="PAID">PAID</option>
+      </select>
+
+      <button type="submit" [disabled]="transactionForm.invalid">Add Transaction</button>
+    </form>
+</div>
