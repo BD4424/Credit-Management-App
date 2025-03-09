@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService{
             customerRepo.save(customer);
             return "Customer created successfully!";
         } catch (Exception ex) {
-            ex.printStackTrace(); // Helps identify the issue
+            ex.printStackTrace();
             return "Customer creation failed!";
         }
     }
