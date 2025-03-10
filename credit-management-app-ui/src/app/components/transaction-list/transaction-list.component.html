@@ -1,4 +1,24 @@
 <div class="container">
     <h2>Transactions</h2>
-    <p>All transactions of a selected customer will appear here.</p>
+    <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <td>{{ transaction.itemName }}</td>
+            <td>{{ transaction.quantity }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.date }}</td>
+            <td [ngClass]="{'pending-status': transaction.status === 'PENDING'}">
+              {{ transaction.status }}</td>
+          </tr>
+        </tbody>
+      </table>
 </div>

@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/transactions")
@@ -20,20 +22,23 @@ public class TransactionController {
     TransactionService transactionService;
 
     @PostMapping()
-    public ResponseEntity<String> createTransaction(TransactionDTO transaction){
+    public ResponseEntity<Map<String, String>> createTransaction(@RequestBody TransactionDTO transaction){
         String transaction1 = transactionService.createTransaction(transaction);
 
-        return new ResponseEntity<>(transaction1, HttpStatus.CREATED);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", transaction1);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{customerId}")
+    @GetMapping("/pendingTransactions/{customerId}")
     public ResponseEntity<List<Transaction>> pendingTransactions(@PathVariable(name = "customerId") Integer customerId){
         List<Transaction> transactions = transactionService.pendingTransactions(customerId);
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-    @GetMapping("/{transactionId}")
+    @GetMapping("/updateTransaction/{transactionId}")
     public ResponseEntity<String> updateTransactionAsPaid(Integer transactionId) {
         String message = transactionService.updateTransactionAsPaid(transactionId);
 

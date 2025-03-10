@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TransactionService } from '../../services/transaction.service';
 
 @Component({
   selector: 'app-add-transaction',
@@ -13,7 +14,7 @@ export class AddTransactionComponent {
   transactionForm: FormGroup;
   customerId: string | null = '';
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute){
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private transactionService: TransactionService, private router: Router){
     this.customerId = this.route.snapshot.paramMap.get('customerId');
 
     this.transactionForm = this.fb.group({
@@ -27,8 +28,18 @@ export class AddTransactionComponent {
 
   onSubmit(){
     if(this.transactionForm.valid){
+      const transactionData = this.transactionForm.value;
       console.log("Transaction Data:", this.transactionForm.value);
-      alert('Transaction added succesfully');
+      
+      this.transactionService.addTransactionForCustomer(transactionData).subscribe({
+        next: (response) => {
+          console.log('Transaction added successfully:', response);
+          alert('Transaction added succesfully');
+          console.log("Navigating to transactions page with ID:", this.customerId);
+          this.router.navigate(['/transactions', this.customerId]);
+        }
+      })
+      
     }else{
       alert('Please fix errors in the form.')
     }

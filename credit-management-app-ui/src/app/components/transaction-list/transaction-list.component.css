@@ -1,0 +1,24 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: rgba(95, 95, 243, 0.893);
+    color: white;
+}
+
+.pending-status {
+    color: black;
+    background-color: burlywood;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+}
