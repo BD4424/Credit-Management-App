@@ -58,13 +58,26 @@ public class TransactionServiceImpl implements TransactionService{
         try {
             Optional<Transaction> transaction = transactionRepo.findById(transactionId);
             if (transaction.isPresent()){
-                transaction.get().setStatus(TransactionStatus.PAID);
+                Transaction transaction1 = transaction.get();
+                transaction1.setStatus(TransactionStatus.PAID);
+                transactionRepo.save(transaction1);
                 return "Transaction updated as paid!";
             } else return "No such transaction found";
         }catch (Exception ex){
             ex.printStackTrace();
         }
 
+        return null;
+    }
+
+    @Override
+    public List<Transaction> allTransactions(Integer customerId) {
+        try {
+            List<Transaction> customerList = transactionRepo.findByCustomerId(customerId);
+            return customerList;
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
         return null;
     }
 

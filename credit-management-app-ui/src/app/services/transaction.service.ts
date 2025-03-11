@@ -12,10 +12,14 @@ export class TransactionService {
   constructor(private http: HttpClient) { }
 
   getTransactionsByCustomer(customerId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/pendingTransactions/${customerId}`)
+    return this.http.get<any[]>(`${this.baseUrl}/allTransactions/${customerId}`)
   }
 
   addTransactionForCustomer(transactionData: any): Observable<any[]> {
     return this.http.post<any>(`${this.baseUrl}`, transactionData);
+  }
+
+  updateTransactionAsPaid(transactionId: number): Observable<any[]> {
+    return this.http.put<any>(`${this.baseUrl}/updateTransaction/${transactionId}`, {})
   }
 }

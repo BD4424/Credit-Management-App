@@ -22,3 +22,27 @@ th {
     padding: 5px;
     border-radius: 5px;
 }
+
+.paid-status{
+    color: black;
+    background-color: rgba(81, 243, 130, 0.893);
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.mark-paid-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+
+.mark-paid-btn:hover {
+    background-color: #218838;
+}

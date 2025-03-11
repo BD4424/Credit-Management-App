@@ -38,10 +38,20 @@ public class TransactionController {
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 
-    @GetMapping("/updateTransaction/{transactionId}")
-    public ResponseEntity<String> updateTransactionAsPaid(Integer transactionId) {
+    @PutMapping("/updateTransaction/{transactionId}")
+    public ResponseEntity<Map<String, String>> updateTransactionAsPaid(@PathVariable(name = "transactionId") Integer transactionId) {
         String message = transactionService.updateTransactionAsPaid(transactionId);
 
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", message);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/allTransactions/{customerId}")
+    public ResponseEntity<List<Transaction>> allTransactions(@PathVariable(name = "customerId") Integer customerId){
+        List<Transaction> transactions = transactionService.allTransactions(customerId);
+
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 }

@@ -18,4 +18,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Integer> {
 
     @Query(value = "select t.customer from Transaction t where t.status = 'PENDING' GROUP BY t.customer")
     List<Customer> findCustomersWithPendingTransactions();
+
+    @Query
+    List<Transaction> findByCustomerId(Integer customerId);
 }
