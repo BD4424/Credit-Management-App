@@ -37,11 +37,25 @@ button:first-child:hover {
   background-color: #0056b3;
 }
 
-button:last-child {
+.add-transaction-btn {
   background-color: #28a745;
   color: white;
 }
 
-button:last-child:hover {
+.add-transaction-btn:hover {
   background-color: #1e7e34;
+}
+
+.send-reminder-btn {
+  background-color: orange;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.send-reminder-btn:hover {
+  background-color: darkorange;
 }

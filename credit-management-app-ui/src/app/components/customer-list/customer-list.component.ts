@@ -3,6 +3,7 @@ import { CustomerService } from '../../services/customer/customer.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { RemindersService } from '../../services/reminders.service';
 
 @Component({
   selector: 'app-customer-list',
@@ -15,7 +16,7 @@ import { HttpClient } from '@angular/common/http';
 export class CustomerListComponent implements OnInit{
   customers: any[] = [];
 
-  constructor(private customerService: CustomerService, private router: Router, private http: HttpClient){}
+  constructor(private customerService: CustomerService, private router: Router, private http: HttpClient, private reminderService: RemindersService){}
 
   ngOnInit(): void {
     this.loadCustomers();
@@ -37,5 +38,18 @@ export class CustomerListComponent implements OnInit{
 
   addTransactions(customerId: number): void {
     this.router.navigate(['/add-transaction',customerId])
+  }
+
+  sendReminder(customerId: number): void {
+    this.reminderService.sendReminderEmailToCustomer(customerId).subscribe({
+      next: (response) => {
+        console.log("Reminder sent successfully:", response);
+        alert('Reminder sent successfully!');
+      },
+      error: (err)=> {
+        console.error('Error sending reminder:', err);
+        alert('Failed to send reminder. Try again.')
+      }
+    });
   }
 }
