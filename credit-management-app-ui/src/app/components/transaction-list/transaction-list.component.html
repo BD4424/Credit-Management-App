@@ -1,5 +1,22 @@
 <div class="container">
     <h2>Transactions</h2>
+     <!-- Sorting Dropdown -->
+     <label for="sort">Sort by:</label>
+     <select id="sort" (change)="sortTransactions($event)">
+       <option value="date-desc">Date (Newest First)</option>
+       <option value="date-asc">Date (Oldest First)</option>
+       <option value="amount-desc">Amount (High to Low)</option>
+       <option value="amount-asc">Amount (Low to High)</option>
+     </select>
+
+     <div class="filter-section">
+      <label>
+        <input type="checkbox" (change)="toggleFilter('PENDING', $event)">Pending
+      </label>
+      <label>
+        <input type="checkbox" (change)="toggleFilter('PAID', $event)">Paid
+      </label>
+     </div>
     <table>
         <thead>
           <tr>
@@ -11,7 +28,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let transaction of transactions">
+          <tr *ngFor="let transaction of filteredTransactions">
             <td>{{ transaction.itemName }}</td>
             <td>{{ transaction.quantity }}</td>
             <td>{{ transaction.amount }}</td>

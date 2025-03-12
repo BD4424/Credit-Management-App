@@ -15,6 +15,7 @@ import { RemindersService } from '../../services/reminders.service';
 
 export class CustomerListComponent implements OnInit{
   customers: any[] = [];
+  sendingReminder: {[customerId: number]: boolean} = {};
 
   constructor(private customerService: CustomerService, private router: Router, private http: HttpClient, private reminderService: RemindersService){}
 
@@ -41,14 +42,18 @@ export class CustomerListComponent implements OnInit{
   }
 
   sendReminder(customerId: number): void {
+    this.sendingReminder[customerId] = true;
     this.reminderService.sendReminderEmailToCustomer(customerId).subscribe({
-      next: (response) => {
+      next: (response: { message: string }) => {
         console.log("Reminder sent successfully:", response);
-        alert('Reminder sent successfully!');
+        alert(response["message"]);
       },
       error: (err)=> {
         console.error('Error sending reminder:', err);
         alert('Failed to send reminder. Try again.')
+      },
+      complete: () => {
+        this.sendingReminder[customerId] = false;
       }
     });
   }

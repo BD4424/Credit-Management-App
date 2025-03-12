@@ -11,7 +11,7 @@ export class RemindersService {
 
   constructor(private http: HttpClient) { }
 
-  sendReminderEmailToCustomer(customerId: number): Observable<any[]> {
+  sendReminderEmailToCustomer(customerId: number): Observable<{ message: string }> {
       return this.http.post<any>(`${this.baseUrl}/sendIndividualReminder/${customerId}`, {});
     }
 }

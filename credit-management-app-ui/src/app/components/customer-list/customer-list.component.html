@@ -18,7 +18,9 @@
         <td>
           <button (click)="viewTransactions(customer.id)">View Transactions</button>
           <button class = "add-transaction-btn" (click)="addTransactions(customer.id)">Add Transaction</button>
-          <button class = "send-reminder-btn" (click)="sendReminder(customer.id)">Send Reminder</button>
+          <button 
+          [disabled]="sendingReminder[customer.id]"
+          class = "send-reminder-btn" (click)="sendReminder(customer.id)">{{sendingReminder[customer.id] ? 'Sending...' : 'Send Reminder'}}</button>
         </td>
       </tr>
     </tbody>
