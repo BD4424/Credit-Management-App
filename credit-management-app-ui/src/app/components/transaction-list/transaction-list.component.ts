@@ -47,20 +47,18 @@ export class TransactionListComponent implements OnInit {
     console.log("Sorting by:", selectedValue);
 
     if (selectedValue === "date-desc") {
-      this.transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      this.filteredTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     } else if (selectedValue === "date-asc") {
-      this.transactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      this.filteredTransactions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     } else if (selectedValue === "amount-desc") {
-      this.transactions.sort((a, b) => b.amount - a.amount);
+      this.filteredTransactions.sort((a, b) => b.amount - a.amount);
     } else if (selectedValue === "amount-asc") {
-      this.transactions.sort((a, b) => a.amount - b.amount);
+      this.filteredTransactions.sort((a, b) => a.amount - b.amount);
     }
   }
   
   toggleFilter(status: string, event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
-
-    console.log(isChecked);
 
     if(isChecked){
       this.selectedFilters.add(status);
@@ -71,7 +69,6 @@ export class TransactionListComponent implements OnInit {
   }
 
   applyFilters() {
-    console.log("Inside Apply Filter")
     if(this.selectedFilters.size === 0) {
       this.filteredTransactions = [...this.transactions];
     }else{
