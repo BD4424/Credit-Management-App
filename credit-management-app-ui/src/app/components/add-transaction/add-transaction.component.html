@@ -1,31 +1,44 @@
 <div class="container">
-    <h2>Add Transaction</h2>
+  <h2 class="form-title">Add Transaction</h2>
 
-    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
-      <label>Item Name:</label>
-      <input type="text" formControlName="itemName">
-      <div *ngIf="transactionForm.get('itemName')?.invalid && transactionForm.get('itemName')?.touched">
-        <small>Item name is required.</small>
-      </div>
+  <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="form-container">
+    
+    <mat-form-field class="full-width">
+      <mat-label>Item Name</mat-label>
+      <input matInput type="text" formControlName="itemName">
+      <mat-error *ngIf="transactionForm.get('itemName')?.invalid && transactionForm.get('itemName')?.touched">
+        Item name is required.
+      </mat-error>
+    </mat-form-field>
 
-      <label>Quantity:</label>
-      <input type="text" formControlName="quantity">
-      <div *ngIf="transactionForm.get('quantity')?.invalid && transactionForm.get('quantity')?.touched">
-        <small>Enter a valid quantity.</small>
-      </div>
+    <div class="input-group">
+      <mat-form-field class="half-width">
+        <mat-label>Quantity</mat-label>
+        <input matInput type="number" formControlName="quantity">
+        <mat-error *ngIf="transactionForm.get('quantity')?.invalid && transactionForm.get('quantity')?.touched">
+          Enter a valid quantity.
+        </mat-error>
+      </mat-form-field>
 
-      <label>Amount:</label>
-      <input type="text" formControlName="amount">
-      <div *ngIf="transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched">
-        <small>Amount is required and should be a valid number.</small>
-      </div>
+      <mat-form-field class="half-width">
+        <mat-label>Amount</mat-label>
+        <input matInput type="number" formControlName="amount">
+        <mat-error *ngIf="transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched">
+          Amount is required and should be a valid number.
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-      <label>Status:</label>
-      <select formControlName="status">
-        <option value="PENDING">PENDING</option>
-        <option value="PAID">PAID</option>
-      </select>
+    <mat-form-field class="full-width">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="PENDING">PENDING</mat-option>
+        <mat-option value="PAID">PAID</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <button type="submit" [disabled]="transactionForm.invalid">Add Transaction</button>
-    </form>
+    <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="transactionForm.invalid">
+      Add Transaction
+    </button>
+  </form>
 </div>

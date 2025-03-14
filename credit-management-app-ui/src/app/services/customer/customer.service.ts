@@ -13,4 +13,8 @@ export class CustomerService {
   getCustomers(): Observable<any> {
     return this.http.get(`${this.baseUrl}`);
   }
+
+  addCustomer(customer: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}`, customer);
+  }
 }
