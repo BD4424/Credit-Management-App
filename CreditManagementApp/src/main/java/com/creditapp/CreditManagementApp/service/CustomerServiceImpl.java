@@ -4,6 +4,7 @@ import com.creditapp.CreditManagementApp.entity.Customer;
 import com.creditapp.CreditManagementApp.entity.Transaction;
 import com.creditapp.CreditManagementApp.repository.CustomerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService{
 //    }
 
     @Override
-    public String createCustomer(Customer customer){
+    public Customer createCustomer(Customer customer){
         try {
             System.out.println("Saving Customer: " + customer.getName());
 
@@ -36,11 +37,11 @@ public class CustomerServiceImpl implements CustomerService{
                 }
             }
 
-            customerRepo.save(customer);
-            return "Customer created successfully!";
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return "Customer creation failed!";
+            return customerRepo.save(customer);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Database constraint violated: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Error while saving customer: " + e.getMessage());
         }
     }
 

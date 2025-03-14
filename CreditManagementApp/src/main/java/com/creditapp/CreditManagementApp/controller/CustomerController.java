@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/customers")
@@ -17,10 +19,21 @@ public class CustomerController {
     CustomerService customerService;
 
     @PostMapping()
-    public ResponseEntity<String> createCustomer(@RequestBody Customer customer){
-        String customer1 = customerService.createCustomer(customer);
+    public ResponseEntity<Map<String, String>> createCustomer(@RequestBody Customer customer){
 
-        return new ResponseEntity<>(customer1, HttpStatus.CREATED);
+        Map<String, String> response = new HashMap<>();
+        try {
+            Customer savedCustomer = customerService.createCustomer(customer);
+            response.put("message", "Customer created successfully!");
+            response.put("customerId", savedCustomer.getId().toString()); // Return created ID
+            return new ResponseEntity<>(response, HttpStatus.CREATED); // 201 Created
+        } catch (IllegalArgumentException e) {
+            response.put("error", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST); // 400 Bad Request
+        } catch (RuntimeException e) {
+            response.put("error", "Internal Server Error: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // 500
+        }
     }
 
     @GetMapping()
