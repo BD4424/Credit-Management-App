@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,14 +72,33 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public List<Transaction> allTransactions(Integer customerId) {
+    public List<Transaction> allTransactionsofCustomer(Integer customerId) {
         try {
-            List<Transaction> customerList = transactionRepo.findByCustomerId(customerId);
-            return customerList;
+            return transactionRepo.findByCustomerId(customerId);
         }catch (Exception ex){
             ex.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<TransactionDTO> allTransactions() {
+        List<Transaction> transactionList = transactionRepo.findAll();
+        List<TransactionDTO> transactionDTOS = new ArrayList<>();
+        for (Transaction transaction: transactionList){
+            TransactionDTO transaction1 = new TransactionDTO();
+            transaction1.setTransactionId(transaction.getTransactionId());
+            transaction1.setAmount(transaction.getAmount());
+            transaction1.setDate(transaction.getDate());
+            transaction1.setCustomerId(transaction.getCustomer().getId());
+            transaction1.setItemName(transaction.getItemName());
+            transaction1.setQuantity(transaction.getQuantity());
+            transaction1.setStatus(transaction.getStatus());
+            transaction1.setCustomerName(transaction.getCustomer().getName());
+
+            transactionDTOS.add(transaction1);
+        }
+        return transactionDTOS;
     }
 
 

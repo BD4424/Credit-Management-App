@@ -49,8 +49,15 @@ public class TransactionController {
     }
 
     @GetMapping("/allTransactions/{customerId}")
-    public ResponseEntity<List<Transaction>> allTransactions(@PathVariable(name = "customerId") Integer customerId){
-        List<Transaction> transactions = transactionService.allTransactions(customerId);
+    public ResponseEntity<List<Transaction>> allTransactionsOfCustomer(@PathVariable(name = "customerId") Integer customerId){
+        List<Transaction> transactions = transactionService.allTransactionsofCustomer(customerId);
+
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    @GetMapping("/allTransactions")
+    public ResponseEntity<List<TransactionDTO>> allTransactions(){
+        List<TransactionDTO> transactions = transactionService.allTransactions();
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
