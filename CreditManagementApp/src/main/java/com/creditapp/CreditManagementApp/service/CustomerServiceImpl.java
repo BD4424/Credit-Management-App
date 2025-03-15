@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -14,16 +15,6 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Autowired
     CustomerRepo customerRepo;
-
-//    @Override
-//    public String createCustomer(Customer customer){
-//        try{
-//            customerRepo.save(customer);
-//            return "customer created successfully!";
-//        }catch (Exception ex){
-//            return "Customer creation failed!";
-//        }
-//    }
 
     @Override
     public Customer createCustomer(Customer customer){
@@ -37,6 +28,7 @@ public class CustomerServiceImpl implements CustomerService{
                 }
             }
 
+            customer.setCreated_at(LocalDateTime.now());
             return customerRepo.save(customer);
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Database constraint violated: " + e.getMessage());

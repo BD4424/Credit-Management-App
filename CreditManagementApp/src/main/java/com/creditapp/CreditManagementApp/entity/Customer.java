@@ -24,7 +24,6 @@ public class Customer {
     @Column(unique = true)
     private String email;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime created_at;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

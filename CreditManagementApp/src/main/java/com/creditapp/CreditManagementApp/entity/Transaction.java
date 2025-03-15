@@ -26,7 +26,6 @@ public class Transaction {
 
     private Double amount;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
