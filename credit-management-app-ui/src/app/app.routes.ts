@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { provideHttpClient } from '@angular/common/http';
+import { TransactionsDataComponent } from './components/transactions-data/transactions-data.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'customers', pathMatch: 'full' },
@@ -22,7 +23,8 @@ export const routes: Routes = [
     { path: 'add-customer', component: AddCustomerComponent },
     { path: 'transactions/:customerId', component: TransactionListComponent },
     { path: 'add-transaction/:customerId', component: AddTransactionComponent },
-    { path: 'reminders', component: RemindersComponent }
+    { path: 'reminders', component: RemindersComponent },
+    { path: 'transactions', component: TransactionsDataComponent }
 ];
 
 

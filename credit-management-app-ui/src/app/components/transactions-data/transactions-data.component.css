@@ -1,0 +1,26 @@
+.transactions-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    /* Centers the cards */
+    padding: 16px;
+}
+
+.transaction-card {
+    width: 320px;
+    /* Set a max width for each card */
+    min-width: 280px;
+    max-width: 400px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+}
+
+.transaction-card:hover {
+    transform: scale(1.05); /* Slightly increase size */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+  }

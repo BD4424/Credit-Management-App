@@ -1,0 +1,25 @@
+<div class="transactions-container">
+    <mat-card *ngFor="let transaction of transactions" class="transaction-card">
+      <mat-card-content>
+        <h3>{{ transaction.itemName }}</h3>
+        <p><strong>Customer:</strong> {{ transaction.customerName }}</p>
+        <p><strong>Quantity:</strong> {{ transaction.quantity }}</p>
+        <p><strong>Amount:</strong> ₹{{ transaction.amount }}</p>
+        <p><strong>Date:</strong> {{ transaction.date | date: 'dd MMM yyyy' }}</p>
+        <p>
+          <strong>Status:</strong> 
+          <span [ngClass]="{
+            'pending-status': transaction.status === 'PENDING',
+            'paid-status': transaction.status === 'PAID'
+          }">
+            {{ transaction.status }}
+          </span>
+        </p>
+        <button *ngIf="transaction.status === 'PENDING'" mat-button color="primary" 
+                (click)="markAsPaid(transaction.transactionId)">
+          Mark Paid
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
