@@ -1,5 +1,10 @@
 <div class="transactions-container">
-    <mat-card *ngFor="let transaction of transactions" class="transaction-card">
+    <mat-card *ngFor="let transaction of transactions" class="transaction-card"
+    [ngClass]="{
+      'pending-card': transaction.status === 'PENDING',
+      'paid-card': transaction.status === 'PAID'
+    }"
+    >
       <mat-card-content>
         <h3>{{ transaction.itemName }}</h3>
         <p><strong>Customer:</strong> {{ transaction.customerName }}</p>
