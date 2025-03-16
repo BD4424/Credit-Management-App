@@ -14,7 +14,8 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Apply CORS to all endpoints
-                        .allowedOrigins("http://localhost:4200","https://credit-management-app.netlify.app") // Allow frontend origin
+                        .allowedOrigins("https://credit-management-app.netlify.app")
+//                        .allowedOrigins("http://localhost:4200","https://credit-management-app.netlify.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allowed HTTP methods
                         .allowedHeaders("*") // Allow all headers
                         .allowCredentials(true); // Allow sending cookies/auth headers
