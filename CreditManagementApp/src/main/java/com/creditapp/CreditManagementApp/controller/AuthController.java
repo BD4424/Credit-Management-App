@@ -43,6 +43,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest){
 
+        System.out.println("Login API hit!");
+
         User user = userRepository.findByUserName(authRequest.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -50,7 +52,7 @@ public class AuthController {
             throw new BadCredentialsException("Incorrect password");
         }
 
-        String token = jwtUtil.generateToken(user.getUserName());
+        String token = jwtUtil.generateToken(user);
         return ResponseEntity.ok(token);
     }
 

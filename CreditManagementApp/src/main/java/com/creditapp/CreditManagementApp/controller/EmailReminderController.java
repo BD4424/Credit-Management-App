@@ -5,6 +5,7 @@ import com.creditapp.CreditManagementApp.repository.CustomerRepo;
 import com.creditapp.CreditManagementApp.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class EmailReminderController {
     }
 
     @PostMapping("/sendMails")
+    @PreAuthorize("hasAuthority('ROLE_SHOP_OWNER')")
     public ResponseEntity<Map<String, String>> sendRemindersManually() {
         Map<String, String> response = new HashMap<>();
         try {
@@ -46,6 +48,7 @@ public class EmailReminderController {
     }
 
     @PostMapping("/sendIndividualReminder/{customerId}")
+    @PreAuthorize("hasAuthority('ROLE_SHOP_OWNER')")
     public ResponseEntity<Map<String, String>> sendRemindersManually(@PathVariable(name = "customerId") Integer customerId) {
         Optional<Customer> customer = customerRepo.findById(customerId);
         Map<String, String> response = new HashMap<>();

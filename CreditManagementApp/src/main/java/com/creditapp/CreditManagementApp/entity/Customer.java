@@ -1,5 +1,7 @@
 package com.creditapp.CreditManagementApp.entity;
 
+import com.creditapp.CreditManagementApp.security.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -28,5 +30,10 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_owner_id", nullable = false)
+    @JsonIgnore
+    private User shopOwner;
 
 }

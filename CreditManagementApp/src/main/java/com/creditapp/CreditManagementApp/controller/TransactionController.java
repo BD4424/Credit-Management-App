@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class TransactionController {
     TransactionService transactionService;
 
     @PostMapping()
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
     public ResponseEntity<Map<String, String>> createTransaction(@RequestBody TransactionDTO transaction){
         String transaction1 = transactionService.createTransaction(transaction);
 
@@ -32,6 +34,7 @@ public class TransactionController {
     }
 
     @GetMapping("/pendingTransactions/{customerId}")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
     public ResponseEntity<List<Transaction>> pendingTransactions(@PathVariable(name = "customerId") Integer customerId){
         List<Transaction> transactions = transactionService.pendingTransactions(customerId);
 
@@ -39,6 +42,7 @@ public class TransactionController {
     }
 
     @PutMapping("/updateTransaction/{transactionId}")
+    @PreAuthorize("hasAuthority('ROLE_SHOP_OWNER')")
     public ResponseEntity<Map<String, String>> updateTransactionAsPaid(@PathVariable(name = "transactionId") Integer transactionId) {
         String message = transactionService.updateTransactionAsPaid(transactionId);
 
@@ -49,6 +53,7 @@ public class TransactionController {
     }
 
     @GetMapping("/allTransactions/{customerId}")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
     public ResponseEntity<List<Transaction>> allTransactionsOfCustomer(@PathVariable(name = "customerId") Integer customerId){
         List<Transaction> transactions = transactionService.allTransactionsofCustomer(customerId);
 
@@ -56,6 +61,7 @@ public class TransactionController {
     }
 
     @GetMapping("/allTransactions")
+    @PreAuthorize("hasAuthority('ROLE_SHOP_OWNER')")
     public ResponseEntity<List<TransactionDTO>> allTransactions(){
         List<TransactionDTO> transactions = transactionService.allTransactions();
 
