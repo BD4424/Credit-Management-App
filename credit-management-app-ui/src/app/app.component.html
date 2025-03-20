@@ -1,4 +1,4 @@
-<nav>
+<nav *ngIf="isLoggedIn()">
   <a routerLink="/customers" routerLinkActive="active">Customer List</a>
   <a routerLink="/add-customer" routerLinkActive="active">Add Customer</a>
   <a routerLink="/transactions" routerLinkActive="active">All Transactions</a>

@@ -23,7 +23,7 @@ public class TransactionController {
     TransactionService transactionService;
 
     @PostMapping()
-    @PreAuthorize("hasAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
     public ResponseEntity<Map<String, String>> createTransaction(@RequestBody TransactionDTO transaction){
         String transaction1 = transactionService.createTransaction(transaction);
 
@@ -34,7 +34,7 @@ public class TransactionController {
     }
 
     @GetMapping("/pendingTransactions/{customerId}")
-    @PreAuthorize("hasAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
     public ResponseEntity<List<Transaction>> pendingTransactions(@PathVariable(name = "customerId") Integer customerId){
         List<Transaction> transactions = transactionService.pendingTransactions(customerId);
 
@@ -53,7 +53,7 @@ public class TransactionController {
     }
 
     @GetMapping("/allTransactions/{customerId}")
-    @PreAuthorize("hasAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
     public ResponseEntity<List<Transaction>> allTransactionsOfCustomer(@PathVariable(name = "customerId") Integer customerId){
         List<Transaction> transactions = transactionService.allTransactionsofCustomer(customerId);
 

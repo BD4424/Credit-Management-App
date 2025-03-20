@@ -14,17 +14,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TransactionsDataComponent } from './components/transactions-data/transactions-data.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuardService } from './services/auth.guard.service';
+import { AuthInterceptorService } from './services/auth.interceptor.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'customers', pathMatch: 'full' },
-    { path: 'customers', component: CustomerListComponent },
-    { path: 'add-customer', component: AddCustomerComponent },
-    { path: 'transactions/:customerId', component: TransactionListComponent },
-    { path: 'add-transaction/:customerId', component: AddTransactionComponent },
-    { path: 'reminders', component: RemindersComponent },
-    { path: 'transactions', component: TransactionsDataComponent }
+    { path: 'customers', component: CustomerListComponent , canActivate: [AuthGuardService]},
+    { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuardService] },
+    { path: 'transactions/:customerId', component: TransactionListComponent, canActivate: [AuthGuardService] },
+    { path: 'add-transaction/:customerId', component: AddTransactionComponent, canActivate: [AuthGuardService] },
+    { path: 'reminders', component: RemindersComponent, canActivate: [AuthGuardService] },
+    { path: 'login', component: LoginComponent },
+    { path: 'transactions', component: TransactionsDataComponent, canActivate: [AuthGuardService]},
+    { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
 
 
@@ -32,6 +37,7 @@ export const routing = RouterModule.forRoot(routes);
 
 bootstrapApplication(AppComponent, {
     providers: [
+      provideHttpClient(withInterceptorsFromDi()),
       provideRouter(routes),
       provideHttpClient(),
       importProvidersFrom(
