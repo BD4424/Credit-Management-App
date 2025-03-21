@@ -12,9 +12,14 @@ import { NgIf } from '@angular/common';
 export class AppComponent {
   title = 'credit-management-app-ui';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   isLoggedIn(): boolean {
     return this.authService.getToken() !== null; // Check if token exists
+  }
+
+  logout() {
+    this.authService.logOut();
+    this.router.navigate(['/login']);
   }
 }

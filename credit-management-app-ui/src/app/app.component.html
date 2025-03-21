@@ -1,8 +1,11 @@
-<nav *ngIf="isLoggedIn()">
-  <a routerLink="/customers" routerLinkActive="active">Customer List</a>
-  <a routerLink="/add-customer" routerLinkActive="active">Add Customer</a>
-  <a routerLink="/transactions" routerLinkActive="active">All Transactions</a>
-  <a routerLink="/reminders" routerLinkActive="active">Reminders</a>
+<nav class="navbar" *ngIf="isLoggedIn()">
+  <div class="nav-links">
+    <a routerLink="/customers" routerLinkActive="active">Customer List</a>
+    <a routerLink="/add-customer" routerLinkActive="active">Add Customer</a>
+    <a routerLink="/transactions" routerLinkActive="active">All Transactions</a>
+    <a routerLink="/reminders" routerLinkActive="active">Reminders</a>
+  </div>
+  <button class="logout-btn"(click)="logout()">Logout</button>
 </nav>
 
 <router-outlet></router-outlet>

@@ -1,0 +1,36 @@
+.navbar {
+    background-color: #1976d2;
+    /* Angular Material Blue */
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Container for navigation links */
+.nav-links {
+    display: flex;
+    gap: 15px;
+    /* Space between links */
+}
+
+/* Logout button styling */
+.logout-btn {
+    background-color: #ff5252; /* Red logout button */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.logout-btn:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
