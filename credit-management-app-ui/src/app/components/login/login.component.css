@@ -38,3 +38,18 @@
     color: red;
   }
   
+  .signup-text {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .signup-link {
+    color: #1976d2;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .signup-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }

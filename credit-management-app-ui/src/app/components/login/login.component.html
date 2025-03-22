@@ -18,5 +18,9 @@
         <button type="submit" [disabled]="loginForm.invalid">Login</button>
     </form>
 
-    <p>Don't have an account? Sign up for new Shop Owner <a routerlink="/signup">Sign up</a></p>
+    <!-- Sign Up Link Below Login Button -->
+  <p class="signup-text">
+    Are you a new user? 
+    <button (click)="navigateToSignup()">Sign Up</button>
+  </p>
 </div>

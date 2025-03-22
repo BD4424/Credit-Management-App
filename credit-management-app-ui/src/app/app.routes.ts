@@ -19,9 +19,9 @@ import { TransactionsDataComponent } from './components/transactions-data/transa
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuardService } from './services/auth.guard.service';
 import { AuthInterceptorService } from './services/auth.interceptor.service';
+import { SignupComponent } from './components/signup/signup.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'customers', pathMatch: 'full' },
     { path: 'customers', component: CustomerListComponent , canActivate: [AuthGuardService]},
     { path: 'add-customer', component: AddCustomerComponent, canActivate: [AuthGuardService] },
     { path: 'transactions/:customerId', component: TransactionListComponent, canActivate: [AuthGuardService] },
@@ -29,7 +29,8 @@ export const routes: Routes = [
     { path: 'reminders', component: RemindersComponent, canActivate: [AuthGuardService] },
     { path: 'login', component: LoginComponent },
     { path: 'transactions', component: TransactionsDataComponent, canActivate: [AuthGuardService]},
-    { path: '', redirectTo: '/login', pathMatch: 'full' }
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: 'signup', component: SignupComponent }
 ];
 
 
