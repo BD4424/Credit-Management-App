@@ -3,7 +3,9 @@ package com.creditapp.CreditManagementApp.controller;
 import com.creditapp.CreditManagementApp.DTO.TransactionDTO;
 import com.creditapp.CreditManagementApp.entity.Transaction;
 import com.creditapp.CreditManagementApp.repository.TransactionRepo;
+import com.creditapp.CreditManagementApp.security.JwtUtil;
 import com.creditapp.CreditManagementApp.service.TransactionService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -21,6 +23,9 @@ public class TransactionController {
 
     @Autowired
     TransactionService transactionService;
+
+    @Autowired
+    JwtUtil jwtUtil;
 
     @PostMapping()
     @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
@@ -62,8 +67,11 @@ public class TransactionController {
 
     @GetMapping("/allTransactions")
     @PreAuthorize("hasAuthority('ROLE_SHOP_OWNER')")
-    public ResponseEntity<List<TransactionDTO>> allTransactions(){
-        List<TransactionDTO> transactions = transactionService.allTransactions();
+    public ResponseEntity<List<TransactionDTO>> allTransactions(HttpServletRequest request){
+
+        String shopOwner = jwtUtil.extractUserNameFromRequest(request);
+
+        List<TransactionDTO> transactions = transactionService.allTransactions(shopOwner);
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }

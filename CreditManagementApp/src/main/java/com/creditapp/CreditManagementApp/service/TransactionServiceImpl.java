@@ -23,6 +23,9 @@ public class TransactionServiceImpl implements TransactionService{
     @Autowired
     CustomerRepo customerRepo;
 
+    @Autowired
+    CustomerService customerService;
+
     @Override
     public String createTransaction(TransactionDTO transaction){
         try {
@@ -82,22 +85,26 @@ public class TransactionServiceImpl implements TransactionService{
     }
 
     @Override
-    public List<TransactionDTO> allTransactions() {
-        List<Transaction> transactionList = transactionRepo.findAll();
+    public List<TransactionDTO> allTransactions(String shopOwner) {
+        List<Customer> allCustomers = customerService.getAllCustomers(shopOwner);
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
-        for (Transaction transaction: transactionList){
-            TransactionDTO transaction1 = new TransactionDTO();
-            transaction1.setTransactionId(transaction.getTransactionId());
-            transaction1.setAmount(transaction.getAmount());
-            transaction1.setDate(transaction.getDate());
-            transaction1.setCustomerId(transaction.getCustomer().getId());
-            transaction1.setItemName(transaction.getItemName());
-            transaction1.setQuantity(transaction.getQuantity());
-            transaction1.setStatus(transaction.getStatus());
-            transaction1.setCustomerName(transaction.getCustomer().getName());
 
-            transactionDTOS.add(transaction1);
-        }
+        allCustomers.forEach(customer -> {
+            customer.getTransactions().forEach(transaction -> {
+                TransactionDTO transaction1 = new TransactionDTO();
+                transaction1.setTransactionId(transaction.getTransactionId());
+                transaction1.setAmount(transaction.getAmount());
+                transaction1.setDate(transaction.getDate());
+                transaction1.setCustomerId(transaction.getCustomer().getId());
+                transaction1.setItemName(transaction.getItemName());
+                transaction1.setQuantity(transaction.getQuantity());
+                transaction1.setStatus(transaction.getStatus());
+                transaction1.setCustomerName(transaction.getCustomer().getName());
+
+                transactionDTOS.add(transaction1);
+            });
+        });
+
         return transactionDTOS;
     }
 

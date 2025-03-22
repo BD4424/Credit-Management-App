@@ -11,5 +11,5 @@ public interface TransactionService {
     List<Transaction> pendingTransactions(Integer customerId);
     String updateTransactionAsPaid(Integer transactionId);
     List<Transaction> allTransactionsofCustomer(Integer customerId);
-    List<TransactionDTO> allTransactions();
+    List<TransactionDTO> allTransactions(String userName);
 }

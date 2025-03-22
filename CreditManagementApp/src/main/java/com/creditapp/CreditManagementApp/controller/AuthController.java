@@ -31,16 +31,19 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
+
+        Map<String, String> response = new HashMap<>();
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             userRepository.save(user);
         } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is already registered");
+            response.put("message", "User is already registered");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
-
-        return ResponseEntity.ok("User registered successfully");
+        response.put("message", "User registered successfully");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
