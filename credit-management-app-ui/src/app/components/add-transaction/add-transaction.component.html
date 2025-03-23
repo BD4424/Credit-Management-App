@@ -1,44 +1,60 @@
 <div class="container">
-  <h2 class="form-title">Add Transaction</h2>
+  <h2 class="form-title">Add Transactions</h2>
 
   <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="form-container">
     
-    <mat-form-field class="full-width">
-      <mat-label>Item Name</mat-label>
-      <input matInput type="text" formControlName="itemName">
-      <mat-error *ngIf="transactionForm.get('itemName')?.invalid && transactionForm.get('itemName')?.touched">
-        Item name is required.
-      </mat-error>
-    </mat-form-field>
+    <div formArrayName="transactions" class="transactions-container">
+      <div *ngFor="let transaction of transactions.controls; let i = index" [formGroupName]="i" class="transaction-row">
+        
+        <mat-form-field class="field">
+          <mat-label>Item Name</mat-label>
+          <input matInput type="text" formControlName="itemName">
+          <mat-error *ngIf="transaction.get('itemName')?.invalid && transaction.get('itemName')?.touched">
+            Required.
+          </mat-error>
+        </mat-form-field>
 
-    <div class="input-group">
-      <mat-form-field class="half-width">
-        <mat-label>Quantity</mat-label>
-        <input matInput type="text" formControlName="quantity">
-        <mat-error *ngIf="transactionForm.get('quantity')?.invalid && transactionForm.get('quantity')?.touched">
-          Enter a valid quantity.
-        </mat-error>
-      </mat-form-field>
+        <mat-form-field class="field">
+          <mat-label>Quantity</mat-label>
+          <input matInput type="text" formControlName="quantity">
+          <mat-error *ngIf="transaction.get('quantity')?.invalid && transaction.get('quantity')?.touched">
+            Invalid.
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="half-width">
-        <mat-label>Amount</mat-label>
-        <input matInput type="number" formControlName="amount">
-        <mat-error *ngIf="transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched">
-          Amount is required and should be a valid number.
-        </mat-error>
-      </mat-form-field>
+        <mat-form-field class="field">
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" formControlName="amount">
+          <mat-error *ngIf="transaction.get('amount')?.invalid && transaction.get('amount')?.touched">
+            Required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="field">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="PENDING">PENDING</mat-option>
+            <mat-option value="PAID">PAID</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Remove button (except first row) -->
+        <button mat-icon-button color="warn" *ngIf="transactions.length > 1" (click)="removeTransaction(i)">
+          ❌
+        </button>
+
+      </div>
     </div>
 
-    <mat-form-field class="full-width">
-      <mat-label>Status</mat-label>
-      <mat-select formControlName="status">
-        <mat-option value="PENDING">PENDING</mat-option>
-        <mat-option value="PAID">PAID</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="actions">
+      <button mat-raised-button color="accent" type="button" (click)="addTransaction()">
+        ➕ Add Transaction
+      </button>
 
-    <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="transactionForm.invalid">
-      Add Transaction
-    </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="transactionForm.invalid">
+        Save Transactions
+      </button>
+    </div>
+
   </form>
 </div>

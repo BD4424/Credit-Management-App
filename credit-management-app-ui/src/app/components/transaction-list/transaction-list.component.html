@@ -32,7 +32,7 @@
             <td>{{ transaction.itemName }}</td>
             <td>{{ transaction.quantity }}</td>
             <td>{{ transaction.amount }}</td>
-            <td>{{ transaction.date }}</td>
+            <td>{{ transaction.date | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
             <td [ngClass]="{'pending-status': transaction.status === 'PENDING',
             'paid-status': transaction.status === 'PAID'}">
               {{ transaction.status }} <button *ngIf="transaction.status === 'PENDING' "class = "mark-paid-btn" (click)="markAsPaid(transaction.transactionId)">Mark Paid</button></td>
