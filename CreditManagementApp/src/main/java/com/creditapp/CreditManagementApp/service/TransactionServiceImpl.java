@@ -6,6 +6,8 @@ import com.creditapp.CreditManagementApp.entity.Transaction;
 import com.creditapp.CreditManagementApp.entity.TransactionStatus;
 import com.creditapp.CreditManagementApp.repository.CustomerRepo;
 import com.creditapp.CreditManagementApp.repository.TransactionRepo;
+import com.creditapp.CreditManagementApp.security.User;
+import com.creditapp.CreditManagementApp.security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,20 +28,34 @@ public class TransactionServiceImpl implements TransactionService{
     @Autowired
     CustomerService customerService;
 
-    @Override
-    public String createTransaction(TransactionDTO transaction){
-        try {
-            Transaction transaction1 = new Transaction();
-            Optional<Customer> customer = customerRepo.findById(transaction.getCustomerId());
-            if (customer.isEmpty()) throw new RuntimeException("Failed to fetch customer details!");
-            transaction1.setAmount(transaction.getAmount());
-            transaction1.setCustomer(customer.get());
-            transaction1.setDate(LocalDateTime.now());
-            transaction1.setQuantity(transaction.getQuantity());
-            transaction1.setItemName(transaction.getItemName());
-            transaction1.setStatus(transaction.getStatus());
+    @Autowired
+    UserRepository userRepo;
 
-            transactionRepo.save(transaction1);
+    @Override
+    public String createTransaction(List<TransactionDTO> transactions, String shopOwner){
+        try {
+
+            Optional<User> shopOwnerOptional = userRepo.findByUserName(shopOwner);
+            if (shopOwnerOptional.isEmpty()) throw new RuntimeException("User Not Found");
+
+            List<Transaction> allTransactions = new ArrayList<>();
+
+            for (TransactionDTO transaction: transactions){
+                Transaction transaction1 = new Transaction();
+                Optional<Customer> customer = customerRepo.findById(transaction.getCustomerId());
+                if (customer.isEmpty()) throw new RuntimeException("Failed to fetch customer details!");
+                transaction1.setAmount(transaction.getAmount());
+                transaction1.setCustomer(customer.get());
+                transaction1.setDate(LocalDateTime.now());
+                transaction1.setQuantity(transaction.getQuantity());
+                transaction1.setItemName(transaction.getItemName());
+                transaction1.setStatus(transaction.getStatus());
+
+                allTransactions.add(transaction1);
+            }
+
+
+            transactionRepo.saveAll(allTransactions);
             return "Transaction added!";
         }catch (Exception ex){
             return "Transaction failed!";

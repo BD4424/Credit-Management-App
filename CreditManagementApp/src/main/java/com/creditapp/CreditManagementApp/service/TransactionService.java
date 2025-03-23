@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TransactionService {
 
-    String createTransaction(TransactionDTO transaction);
+    String createTransaction(List<TransactionDTO> transactions, String shopOwner);
     List<Transaction> pendingTransactions(Integer customerId);
     String updateTransactionAsPaid(Integer transactionId);
     List<Transaction> allTransactionsofCustomer(Integer customerId);

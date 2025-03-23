@@ -29,8 +29,12 @@ public class TransactionController {
 
     @PostMapping()
     @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
-    public ResponseEntity<Map<String, String>> createTransaction(@RequestBody TransactionDTO transaction){
-        String transaction1 = transactionService.createTransaction(transaction);
+    public ResponseEntity<Map<String, String>> createTransaction(@RequestBody List<TransactionDTO> transactions
+            , HttpServletRequest request){
+
+        String shopOwner = jwtUtil.extractUserNameFromRequest(request);
+
+        String transaction1 = transactionService.createTransaction(transactions,shopOwner);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", transaction1);
