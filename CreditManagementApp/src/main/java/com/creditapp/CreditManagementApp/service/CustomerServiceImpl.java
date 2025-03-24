@@ -1,7 +1,6 @@
 package com.creditapp.CreditManagementApp.service;
 
 import com.creditapp.CreditManagementApp.entity.Customer;
-import com.creditapp.CreditManagementApp.entity.Transaction;
 import com.creditapp.CreditManagementApp.repository.CustomerRepo;
 import com.creditapp.CreditManagementApp.security.User;
 import com.creditapp.CreditManagementApp.security.UserRepository;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -27,19 +27,32 @@ public class CustomerServiceImpl implements CustomerService{
         try {
             System.out.println("Saving Customer: " + customer.getName());
 
-            if (customer.getTransactions() != null) {
-                for (Transaction transaction : customer.getTransactions()) {
-                    transaction.setCustomer(customer);
-                    System.out.println("Assigning transaction: " + transaction.getItemName());
-                }
-            }
-
             User shopOwnerDetails = userRepository.findByUserName(shopOwner)
                     .orElseThrow(() -> new UsernameNotFoundException("Shop Owner not found"));
-            customer.setShopOwner(shopOwnerDetails);
-            customer.setCreated_at(LocalDateTime.now());
+            // Check if customer already exists (by phone or email)
+            Optional<Customer> existingCustomer = customerRepo.findByPhoneNoOrEmail(customer.getPhoneNo(), customer.getEmail());
 
-            return customerRepo.save(customer);
+            Customer savedCustomer;
+            if (existingCustomer.isPresent()){
+                savedCustomer = existingCustomer.get();
+
+                if (!savedCustomer.getShopOwners().contains(shopOwnerDetails)){
+                    savedCustomer.getShopOwners().add(shopOwnerDetails);
+                    customerRepo.save(savedCustomer);
+                }
+                if (!shopOwnerDetails.getCustomers().contains(savedCustomer)){
+                    shopOwnerDetails.getCustomers().add(savedCustomer);
+                    userRepository.save(shopOwnerDetails);
+                }
+            }else {
+                // Create new Customer
+                customer.setCreated_at(LocalDateTime.now());
+                customer.getShopOwners().add(shopOwnerDetails);
+
+                savedCustomer = customerRepo.save(customer);
+            }
+
+            return savedCustomer;
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Database constraint violated: " + e.getMessage());
         } catch (Exception e) {
@@ -54,6 +67,6 @@ public class CustomerServiceImpl implements CustomerService{
         User shopOwnerDetails = userRepository.findByUserName(shopOwner)
                 .orElseThrow(() -> new UsernameNotFoundException("Shop Owner not found"));
 
-        return customerRepo.findByShopOwner(shopOwnerDetails);
+        return shopOwnerDetails.getCustomers();
     }
 }

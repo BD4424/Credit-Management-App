@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,9 +32,12 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
-    @ManyToOne
-    @JoinColumn(name = "shop_owner_id", nullable = false)
+    @ManyToMany
+    @JoinTable(name = "customer_shopowners",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "shopowner)id")
+    )
     @JsonIgnore
-    private User shopOwner;
+    private List<User> shopOwners = new ArrayList<>();
 
 }

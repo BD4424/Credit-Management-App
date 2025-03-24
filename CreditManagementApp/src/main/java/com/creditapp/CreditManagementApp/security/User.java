@@ -1,13 +1,11 @@
 package com.creditapp.CreditManagementApp.security;
 
 import com.creditapp.CreditManagementApp.entity.Customer;
-import com.creditapp.CreditManagementApp.entity.Transaction;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -24,6 +22,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    @OneToMany(mappedBy = "shopOwner", cascade = CascadeType.ALL)
-    private List<Customer> customers;
+    @ManyToMany(mappedBy = "shopOwners")
+    List<Customer> customers = new ArrayList<>();
+
 }
