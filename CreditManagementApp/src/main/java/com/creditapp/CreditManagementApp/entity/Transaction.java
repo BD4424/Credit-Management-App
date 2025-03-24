@@ -1,5 +1,6 @@
 package com.creditapp.CreditManagementApp.entity;
 
+import com.creditapp.CreditManagementApp.security.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -30,5 +31,10 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_owner_id")
+    @JsonIgnore
+    private User shopOwner;
 
 }

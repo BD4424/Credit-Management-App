@@ -63,8 +63,11 @@ public class TransactionController {
 
     @GetMapping("/allTransactions/{customerId}")
     @PreAuthorize("hasAnyAuthority('ROLE_CUSTOMER', 'ROLE_SHOP_OWNER')")
-    public ResponseEntity<List<Transaction>> allTransactionsOfCustomer(@PathVariable(name = "customerId") Integer customerId){
-        List<Transaction> transactions = transactionService.allTransactionsofCustomer(customerId);
+    public ResponseEntity<List<Transaction>> allTransactionsOfCustomer(@PathVariable(name = "customerId") Integer customerId
+            , HttpServletRequest request){
+        String shopOwner = jwtUtil.extractUserNameFromRequest(request);
+
+        List<Transaction> transactions = transactionService.allTransactionsOfCustomerOfAShopOwner(customerId, shopOwner);
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }

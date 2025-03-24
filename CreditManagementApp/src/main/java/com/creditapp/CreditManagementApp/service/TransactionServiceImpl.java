@@ -50,6 +50,7 @@ public class TransactionServiceImpl implements TransactionService{
                 transaction1.setQuantity(transaction.getQuantity());
                 transaction1.setItemName(transaction.getItemName());
                 transaction1.setStatus(transaction.getStatus());
+                transaction1.setShopOwner(shopOwnerOptional.get());
 
                 allTransactions.add(transaction1);
             }
@@ -98,6 +99,20 @@ public class TransactionServiceImpl implements TransactionService{
             ex.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<Transaction> allTransactionsOfCustomerOfAShopOwner(Integer customerId, String shopOwner) {
+        Optional<User> shopOwnerOptional = userRepo.findByUserName(shopOwner);
+        Optional<Customer> customer = customerRepo.findById(customerId);
+
+        List<Transaction> byCustomerAndShopOwner = new ArrayList<>();
+
+        if (customer.isPresent() && shopOwnerOptional.isPresent()){
+            byCustomerAndShopOwner = transactionRepo.findByCustomerAndShopOwner(customer.get(), shopOwnerOptional.get());
+        }
+
+        return byCustomerAndShopOwner;
     }
 
     @Override

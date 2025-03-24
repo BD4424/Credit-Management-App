@@ -2,6 +2,7 @@ package com.creditapp.CreditManagementApp.repository;
 
 import com.creditapp.CreditManagementApp.entity.Customer;
 import com.creditapp.CreditManagementApp.entity.Transaction;
+import com.creditapp.CreditManagementApp.security.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,6 @@ public interface TransactionRepo extends JpaRepository<Transaction, Integer> {
 
     @Query
     List<Transaction> findByCustomerId(Integer customerId);
+
+    List<Transaction> findByCustomerAndShopOwner(Customer customer, User shopOwner);
 }

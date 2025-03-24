@@ -12,4 +12,5 @@ public interface TransactionService {
     String updateTransactionAsPaid(Integer transactionId);
     List<Transaction> allTransactionsofCustomer(Integer customerId);
     List<TransactionDTO> allTransactions(String userName);
+    List<Transaction> allTransactionsOfCustomerOfAShopOwner(Integer customerId, String shopOwner);
 }
