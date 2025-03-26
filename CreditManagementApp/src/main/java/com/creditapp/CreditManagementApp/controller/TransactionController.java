@@ -7,12 +7,14 @@ import com.creditapp.CreditManagementApp.security.JwtUtil;
 import com.creditapp.CreditManagementApp.service.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,5 +83,18 @@ public class TransactionController {
         List<TransactionDTO> transactions = transactionService.allTransactions(shopOwner);
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    @GetMapping("/getFilteredTransactions")
+    public ResponseEntity<List<TransactionDTO>> getFilteredTransactions(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+            @RequestParam(required = false) String status){
+        List<TransactionDTO> transactions = transactionService.getFilteredTransactions(fromDate, toDate, status);
+
+        System.out.println("Inside getFilteredTransactions");
+
+
+        return ResponseEntity.ok(transactions);
     }
 }

@@ -9,15 +9,18 @@ import com.creditapp.CreditManagementApp.repository.TransactionRepo;
 import com.creditapp.CreditManagementApp.security.User;
 import com.creditapp.CreditManagementApp.security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TransactionServiceImpl implements TransactionService{
+public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     TransactionRepo transactionRepo;
@@ -32,7 +35,7 @@ public class TransactionServiceImpl implements TransactionService{
     UserRepository userRepo;
 
     @Override
-    public String createTransaction(List<TransactionDTO> transactions, String shopOwner){
+    public String createTransaction(List<TransactionDTO> transactions, String shopOwner) {
         try {
 
             Optional<User> shopOwnerOptional = userRepo.findByUserName(shopOwner);
@@ -40,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService{
 
             List<Transaction> allTransactions = new ArrayList<>();
 
-            for (TransactionDTO transaction: transactions){
+            for (TransactionDTO transaction : transactions) {
                 Transaction transaction1 = new Transaction();
                 Optional<Customer> customer = customerRepo.findById(transaction.getCustomerId());
                 if (customer.isEmpty()) throw new RuntimeException("Failed to fetch customer details!");
@@ -58,7 +61,7 @@ public class TransactionServiceImpl implements TransactionService{
 
             transactionRepo.saveAll(allTransactions);
             return "Transaction added!";
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return "Transaction failed!";
         }
     }
@@ -67,7 +70,7 @@ public class TransactionServiceImpl implements TransactionService{
     public List<Transaction> pendingTransactions(Integer customerId) {
         try {
             return transactionRepo.fetchAllPendingTransactionForCustomer(customerId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
@@ -78,13 +81,13 @@ public class TransactionServiceImpl implements TransactionService{
 
         try {
             Optional<Transaction> transaction = transactionRepo.findById(transactionId);
-            if (transaction.isPresent()){
+            if (transaction.isPresent()) {
                 Transaction transaction1 = transaction.get();
                 transaction1.setStatus(TransactionStatus.PAID);
                 transactionRepo.save(transaction1);
                 return "Transaction updated as paid!";
             } else return "No such transaction found";
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -95,7 +98,7 @@ public class TransactionServiceImpl implements TransactionService{
     public List<Transaction> allTransactionsofCustomer(Integer customerId) {
         try {
             return transactionRepo.findByCustomerId(customerId);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
@@ -108,11 +111,47 @@ public class TransactionServiceImpl implements TransactionService{
 
         List<Transaction> byCustomerAndShopOwner = new ArrayList<>();
 
-        if (customer.isPresent() && shopOwnerOptional.isPresent()){
+        if (customer.isPresent() && shopOwnerOptional.isPresent()) {
             byCustomerAndShopOwner = transactionRepo.findByCustomerAndShopOwner(customer.get(), shopOwnerOptional.get());
         }
 
         return byCustomerAndShopOwner;
+    }
+
+    @Override
+    public List<TransactionDTO> getFilteredTransactions(LocalDate fromDate, LocalDate toDate, String status) {
+
+        System.out.println(fromDate+":::::"+toDate);
+        Specification<Transaction> spec = Specification.where(null);
+
+        if (fromDate != null) {
+            spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("date"), fromDate));
+        }
+        if (toDate != null) {
+            spec = spec.and((root, query, cb) -> cb.lessThan(root.get("date"), toDate.plusDays(1).atStartOfDay()));
+        }
+        if (status != null && !status.equals("ALL")) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
+        }
+
+        List<Transaction> transactionList = transactionRepo.findAll(spec);
+
+        List<TransactionDTO> transactionDTOS = new ArrayList<>();
+        for (Transaction transaction: transactionList) {
+            TransactionDTO transactionDTO = new TransactionDTO();;
+            transactionDTO.setCustomerName(transaction.getCustomer().getName());
+            transactionDTO.setTransactionId(transaction.getTransactionId());
+            transactionDTO.setAmount(transaction.getAmount());
+            transactionDTO.setQuantity(transaction.getQuantity());
+            transactionDTO.setItemName(transaction.getItemName());
+            transactionDTO.setStatus(transaction.getStatus());
+            transactionDTO.setDate(transaction.getDate());
+
+            transactionDTOS.add(transactionDTO);
+        }
+
+        return transactionDTOS;
+
     }
 
     @Override
