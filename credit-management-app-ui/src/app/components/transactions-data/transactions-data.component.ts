@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { TransactionService } from '../../services/transaction.service';
 import { MatSelectModule } from '@angular/material/select';
@@ -8,9 +8,22 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { format } from 'date-fns';
+
+interface Transaction {
+  date: Date;
+  itemName: string;
+  quantity: number;
+  amount: number;
+  status: 'PAID' | 'PENDING';
+  customerName: string;
+  transactionId: number;
+}
 
 @Component({
   selector: 'app-transactions-data',
@@ -24,85 +37,103 @@ import { format } from 'date-fns';
     MatNativeDateModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule, 
-    MatTableModule 
+    MatButtonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   templateUrl: './transactions-data.component.html',
-  styleUrl: './transactions-data.component.css'
+  styleUrls: ['./transactions-data.component.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] 
 })
-export class TransactionsDataComponent {
-  transactions: any[] = [];
+
+export class TransactionsDataComponent implements AfterViewInit {
   displayedColumns: string[] = ['date', 'itemName', 'quantity', 'amount', 'status', 'customer', 'action'];
+  dataSource = new MatTableDataSource<Transaction>([]);
+  
+  @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort!: MatSort;
+
   filter = {
     fromDate: undefined as Date | undefined,
     toDate: undefined as Date | undefined,
     status: 'ALL'
   };
 
-  constructor(private transactionService: TransactionService) { }
+  isLoading = false;
 
-  ngOnInit(): void {
+  constructor(
+    private transactionService: TransactionService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  
+
+  ngOnInit() {
     this.loadAllTransactions();
   }
 
   loadAllTransactions() {
-    this.transactionService.allTransactions().subscribe((data) => {
-      this.transactions = data;
-      console.log("All transactions", this.transactions);
+    this.isLoading = true;
+    this.transactionService.allTransactions().subscribe({
+      next: (data = []) => {
+        this.dataSource = new MatTableDataSource(data); // Reinitialize dataSource
+        this.isLoading = false;
+  
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator; // Assign paginator
+          this.dataSource.sort = this.sort; // Assign sorting
+          this.cdr.detectChanges();
+        });
+      },
+      error: (err) => {
+        console.error('Error loading transactions:', err);
+        this.dataSource.data = [];
+        this.isLoading = false;
+      }
     });
   }
 
   markAsPaid(transactionId: number) {
     this.transactionService.updateTransactionAsPaid(transactionId).subscribe({
-      next: (response) => {
-        console.log('Transaction marked as paid', response);
-        alert('Transaction marked as paid successfully');
-        this.loadAllTransactions();
-      },
+      next: () => this.loadAllTransactions(),
       error: (err) => console.error('Error updating transaction:', err)
     });
   }
 
   applyFilters() {
-    console.log('Filters Applied:', this.filter);
-    this.fetchFilteredTransactions();
-  }
-
-  fetchFilteredTransactions() {
-    // Convert dates to ISO string (YYYY-MM-DD) or send null if not defined
     const params: any = {
       status: this.filter.status !== 'ALL' ? this.filter.status : null
     };
   
     if (this.filter.fromDate) {
-      console.log(this.filter.fromDate);
-      params.fromDate = this.convertToDateString(this.filter.fromDate);
-      console.log(params.fromDate);
+      params.fromDate = this.formatDate(this.filter.fromDate);
     }
   
     if (this.filter.toDate) {
-      params.toDate = this.convertToDateString(this.filter.toDate);
-      console.log(params.toDate);
+      params.toDate = this.formatDate(this.filter.toDate);
     }
-  
-    console.log('Request params:', params);
   
     this.transactionService.getTransactions(params.fromDate, params.toDate, params.status)
       .subscribe({
         next: (response) => {
-          this.transactions = response;
-          this.updateCharts();
+          this.dataSource = new MatTableDataSource(response); // Reinitialize dataSource
+          setTimeout(() => {
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.paginator.firstPage(); // Reset to first page
+          });
         },
         error: (err) => console.error('Error fetching transactions:', err)
       });
   }
+  
 
-  updateCharts() {
-    console.log("Updating charts...");
-    // TODO: Implement chart update logic
-  }
-
-  convertToDateString(date: Date): string {
-    return format(date, 'yyyy-MM-dd'); // Converts Date to 'YYYY-MM-DD'
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 }

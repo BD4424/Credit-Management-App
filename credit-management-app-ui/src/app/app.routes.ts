@@ -5,7 +5,7 @@ import { AddCustomerComponent } from './components/add-customer/add-customer.com
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 import { AddTransactionComponent } from './components/add-transaction/add-transaction.component';
 import { RemindersComponent } from './components/reminders/reminders.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Import Angular Material Modules
 import { MatInputModule } from '@angular/material/input';
@@ -20,6 +20,14 @@ import { LoginComponent } from './components/login/login.component';
 import { AuthGuardService } from './services/auth.guard.service';
 import { AuthInterceptorService } from './services/auth.interceptor.service';
 import { SignupComponent } from './components/signup/signup.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { format } from 'date-fns';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 export const routes: Routes = [
     { path: 'customers', component: CustomerListComponent , canActivate: [AuthGuardService]},
@@ -45,7 +53,19 @@ bootstrapApplication(AppComponent, {
         MatInputModule,
         MatFormFieldModule,
         MatButtonModule,
-        MatSelectModule
+        MatSelectModule,
+        MatPaginatorModule,
+        CommonModule,
+            MatCardModule,
+            MatSelectModule,
+            FormsModule,
+            MatDatepickerModule,
+            MatNativeDateModule,
+            MatInputModule,
+            MatIconModule,
+            MatButtonModule, 
+            MatTableModule,
+            MatPaginatorModule 
       )
     ]
   });
