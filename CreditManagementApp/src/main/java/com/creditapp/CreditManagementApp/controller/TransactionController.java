@@ -89,8 +89,11 @@ public class TransactionController {
     public ResponseEntity<List<TransactionDTO>> getFilteredTransactions(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
-            @RequestParam(required = false) String status){
-        List<TransactionDTO> transactions = transactionService.getFilteredTransactions(fromDate, toDate, status);
+            @RequestParam(required = false) String status, HttpServletRequest request){
+
+        String shopOwner = jwtUtil.extractUserNameFromRequest(request);
+
+        List<TransactionDTO> transactions = transactionService.getFilteredTransactions(fromDate, toDate, status,shopOwner);
 
         System.out.println("Inside getFilteredTransactions");
 

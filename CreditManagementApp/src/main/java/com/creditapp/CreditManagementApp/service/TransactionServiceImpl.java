@@ -11,6 +11,7 @@ import com.creditapp.CreditManagementApp.security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -119,7 +120,10 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> getFilteredTransactions(LocalDate fromDate, LocalDate toDate, String status) {
+    public List<TransactionDTO> getFilteredTransactions(LocalDate fromDate, LocalDate toDate, String status, String shopOwner) {
+
+        Optional<User> shopOwnerOptional = userRepo.findByUserName(shopOwner);
+        if (shopOwnerOptional.isEmpty()) throw new RuntimeException("Shop Owner not available or check DB!");
 
         System.out.println(fromDate+":::::"+toDate);
         Specification<Transaction> spec = Specification.where(null);
@@ -128,7 +132,7 @@ public class TransactionServiceImpl implements TransactionService {
             spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("date"), fromDate));
         }
         if (toDate != null) {
-            spec = spec.and((root, query, cb) -> cb.lessThan(root.get("date"), toDate.plusDays(1).atStartOfDay()));
+            spec = spec.and((root, query, cb) -> cb.lessThan(root.get("date"), toDate.plusDays(2).atStartOfDay()));
         }
         if (status != null && !status.equals("ALL")) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
@@ -138,16 +142,18 @@ public class TransactionServiceImpl implements TransactionService {
 
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
         for (Transaction transaction: transactionList) {
-            TransactionDTO transactionDTO = new TransactionDTO();;
-            transactionDTO.setCustomerName(transaction.getCustomer().getName());
-            transactionDTO.setTransactionId(transaction.getTransactionId());
-            transactionDTO.setAmount(transaction.getAmount());
-            transactionDTO.setQuantity(transaction.getQuantity());
-            transactionDTO.setItemName(transaction.getItemName());
-            transactionDTO.setStatus(transaction.getStatus());
-            transactionDTO.setDate(transaction.getDate());
+            if (transaction.getShopOwner().equals(shopOwnerOptional.get())){
+                TransactionDTO transactionDTO = new TransactionDTO();;
+                transactionDTO.setCustomerName(transaction.getCustomer().getName());
+                transactionDTO.setTransactionId(transaction.getTransactionId());
+                transactionDTO.setAmount(transaction.getAmount());
+                transactionDTO.setQuantity(transaction.getQuantity());
+                transactionDTO.setItemName(transaction.getItemName());
+                transactionDTO.setStatus(transaction.getStatus());
+                transactionDTO.setDate(transaction.getDate());
 
-            transactionDTOS.add(transactionDTO);
+                transactionDTOS.add(transactionDTO);
+            }
         }
 
         return transactionDTOS;
@@ -158,20 +164,25 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionDTO> allTransactions(String shopOwner) {
         List<Customer> allCustomers = customerService.getAllCustomers(shopOwner);
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
+        User shopOwner1 = userRepo.findByUserName(shopOwner)
+                .orElseThrow(() -> new UsernameNotFoundException("Shop Owner not found"));
 
         allCustomers.forEach(customer -> {
             customer.getTransactions().forEach(transaction -> {
-                TransactionDTO transaction1 = new TransactionDTO();
-                transaction1.setTransactionId(transaction.getTransactionId());
-                transaction1.setAmount(transaction.getAmount());
-                transaction1.setDate(transaction.getDate());
-                transaction1.setCustomerId(transaction.getCustomer().getId());
-                transaction1.setItemName(transaction.getItemName());
-                transaction1.setQuantity(transaction.getQuantity());
-                transaction1.setStatus(transaction.getStatus());
-                transaction1.setCustomerName(transaction.getCustomer().getName());
+                if (transaction.getShopOwner().equals(shopOwner1)){
+                    TransactionDTO transaction1 = new TransactionDTO();
+                    transaction1.setTransactionId(transaction.getTransactionId());
+                    transaction1.setAmount(transaction.getAmount());
+                    transaction1.setDate(transaction.getDate());
+                    transaction1.setCustomerId(transaction.getCustomer().getId());
+                    transaction1.setItemName(transaction.getItemName());
+                    transaction1.setQuantity(transaction.getQuantity());
+                    transaction1.setStatus(transaction.getStatus());
+                    transaction1.setCustomerName(transaction.getCustomer().getName());
 
-                transactionDTOS.add(transaction1);
+                    transactionDTOS.add(transaction1);
+                }
+
             });
         });
 
