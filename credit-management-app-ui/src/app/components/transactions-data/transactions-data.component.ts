@@ -44,13 +44,13 @@ interface Transaction {
   ],
   templateUrl: './transactions-data.component.html',
   styleUrls: ['./transactions-data.component.css'],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA] 
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 export class TransactionsDataComponent implements AfterViewInit {
   displayedColumns: string[] = ['date', 'itemName', 'quantity', 'amount', 'status', 'customer', 'action'];
   dataSource = new MatTableDataSource<Transaction>([]);
-  
+
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
 
@@ -65,13 +65,13 @@ export class TransactionsDataComponent implements AfterViewInit {
   constructor(
     private transactionService: TransactionService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-  
+
 
   ngOnInit() {
     this.loadAllTransactions();
@@ -83,7 +83,7 @@ export class TransactionsDataComponent implements AfterViewInit {
       next: (data = []) => {
         this.dataSource = new MatTableDataSource(data); // Reinitialize dataSource
         this.isLoading = false;
-  
+
         setTimeout(() => {
           this.dataSource.paginator = this.paginator; // Assign paginator
           this.dataSource.sort = this.sort; // Assign sorting
@@ -109,15 +109,15 @@ export class TransactionsDataComponent implements AfterViewInit {
     const params: any = {
       status: this.filter.status !== 'ALL' ? this.filter.status : null
     };
-  
+
     if (this.filter.fromDate) {
       params.fromDate = this.formatDateForBackend(this.filter.fromDate);
     }
-  
+
     if (this.filter.toDate) {
       params.toDate = this.formatDateForBackend(this.filter.toDate);
     }
-  
+
     this.transactionService.getTransactions(params.fromDate, params.toDate, params.status)
       .subscribe({
         next: (response) => {
@@ -131,11 +131,54 @@ export class TransactionsDataComponent implements AfterViewInit {
         error: (err) => console.error('Error fetching transactions:', err)
       });
   }
-  
+
 
   formatDateForBackend(date: Date): string {
     const localDate = new Date(date);
     localDate.setHours(12, 0, 0, 0); // Ensure it's in the middle of the day to prevent timezone shifts
     return localDate.toISOString().split('T')[0]; // Send only YYYY-MM-DD
   }
+
+  exportToCSV() {
+    // Get filtered data (respects pagination/sorting/filters)
+    const dataToExport = this.dataSource.filteredData.length
+      ? this.dataSource.filteredData
+      : this.dataSource.data;
+
+    if (dataToExport.length === 0) {
+      alert('No transactions to export!');
+      return;
+    }
+
+    const headers = ['Date', 'Item', 'Quantity', 'Amount (₹)', 'Status', 'Customer'];
+    const csvRows = [];
+
+    // Add headers
+    csvRows.push(headers.join(','));
+
+    // Add data rows
+    dataToExport.forEach(transaction => {
+      const row = [
+        `"${format(new Date(transaction.date), 'yyyy-MM-dd HH:mm')}"`,
+        `"${transaction.itemName.replace(/"/g, '""')}"`, // Escape quotes
+        transaction.quantity,
+        transaction.amount,
+        transaction.status,
+        `"${transaction.customerName.replace(/"/g, '""')}"`
+      ];
+      csvRows.push(row.join(','));
+    });
+
+    // Create and trigger download
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `transactions_${format(new Date(), 'yyyyMMdd_HHmmss')}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+
+  }
+
 }

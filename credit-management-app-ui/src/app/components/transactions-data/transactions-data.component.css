@@ -18,10 +18,22 @@
   }
   
   .transactions-section {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background-color: rgb(244, 232, 232);
+  }
+  
+  .transactions-section h2 {
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+  }
+
+  .export-btn {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    margin-top: -8px;
+    height: 20px;
   }
   
   .transactions-table {

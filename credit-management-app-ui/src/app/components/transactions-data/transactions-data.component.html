@@ -37,7 +37,11 @@
 
   <div class="transactions-section">
     <h2>Transaction History</h2>
-    
+    <!-- NEW: CSV Export Button -->
+    <button mat-raised-button color="accent" (click)="exportToCSV()" class="export-btn">
+      <mat-icon>download</mat-icon>
+      Export CSV
+    </button>
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
     
     <div *ngIf="!isLoading">
