@@ -111,11 +111,11 @@ export class TransactionsDataComponent implements AfterViewInit {
     };
   
     if (this.filter.fromDate) {
-      params.fromDate = this.formatDate(this.filter.fromDate);
+      params.fromDate = this.formatDateForBackend(this.filter.fromDate);
     }
   
     if (this.filter.toDate) {
-      params.toDate = this.formatDate(this.filter.toDate);
+      params.toDate = this.formatDateForBackend(this.filter.toDate);
     }
   
     this.transactionService.getTransactions(params.fromDate, params.toDate, params.status)
@@ -133,7 +133,9 @@ export class TransactionsDataComponent implements AfterViewInit {
   }
   
 
-  private formatDate(date: Date): string {
-    return date.toISOString().split('T')[0];
+  formatDateForBackend(date: Date): string {
+    const localDate = new Date(date);
+    localDate.setHours(12, 0, 0, 0); // Ensure it's in the middle of the day to prevent timezone shifts
+    return localDate.toISOString().split('T')[0]; // Send only YYYY-MM-DD
   }
 }
