@@ -132,7 +132,7 @@ public class TransactionServiceImpl implements TransactionService {
             spec = spec.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("date"), fromDate));
         }
         if (toDate != null) {
-            spec = spec.and((root, query, cb) -> cb.lessThan(root.get("date"), toDate.plusDays(2).atStartOfDay()));
+            spec = spec.and((root, query, cb) -> cb.lessThan(root.get("date"), toDate.plusDays(1).atStartOfDay()));
         }
         if (status != null && !status.equals("ALL")) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
