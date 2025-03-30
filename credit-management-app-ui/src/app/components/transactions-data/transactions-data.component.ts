@@ -15,6 +15,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { format } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
+import { KpiCardComponent } from '../../shared/components/kpi-card/kpi-card.component';
 
 interface Transaction {
   date: Date;
@@ -24,6 +25,12 @@ interface Transaction {
   status: 'PAID' | 'PENDING';
   customerName: string;
   transactionId: number;
+}
+
+interface Metric {
+  title: string;
+  value: string;
+  trend?: 'up' | 'down'; // Strictly typed
 }
 
 @Component({
@@ -41,7 +48,8 @@ interface Transaction {
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    KpiCardComponent
   ],
   templateUrl: './transactions-data.component.html',
   styleUrls: ['./transactions-data.component.css'],
@@ -51,6 +59,13 @@ interface Transaction {
 export class TransactionsDataComponent implements AfterViewInit {
   displayedColumns: string[] = ['date', 'itemName', 'quantity', 'amount', 'status', 'customer', 'action'];
   dataSource = new MatTableDataSource<Transaction>([]);
+  
+  quickMetrics: Metric[] = [
+    { title: 'Total Outstanding', value: '₹2.4L', trend: 'up' },
+    { title: 'Avg. Payment Delay', value: '2.3 days', trend: 'down' },
+    { title: 'High-Risk Accounts', value: '12%' } // No trend
+  ];
+
 
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;

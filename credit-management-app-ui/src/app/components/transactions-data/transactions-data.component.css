@@ -14,7 +14,9 @@
   }
   
   .apply-btn {
-    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-top: 10px;
   }
   
   .transactions-section {
@@ -22,7 +24,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: rgb(244, 232, 232);
-    padding: 15px 20px;  
+    padding: 15px 20px;
   }
   
   .transactions-header {
@@ -109,3 +111,11 @@
   mat-progress-bar {
     margin-bottom: 20px;
   }
+
+  .kpi-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap; /* For mobile responsiveness */
+  }
+  

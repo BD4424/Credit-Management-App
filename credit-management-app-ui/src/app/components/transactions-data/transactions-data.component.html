@@ -35,6 +35,14 @@
     </div>
   </div>
 
+  <div class="kpi-row">
+    <app-kpi-card *ngFor="let metric of quickMetrics"
+                  [title]="metric.title"
+                  [value]="metric.value"
+                  [trend]="metric.trend">
+    </app-kpi-card>
+  </div>
+  
   <div class="transactions-section">
     <h2>Transaction History</h2>
     <div class="export-buttons-wrapper">
