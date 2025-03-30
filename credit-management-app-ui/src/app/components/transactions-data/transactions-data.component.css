@@ -19,29 +19,46 @@
   
   .transactions-section {
     position: relative;
+    justify-content: space-between;
+    align-items: center;
     background-color: rgb(244, 232, 232);
+    padding: 15px 20px;  
+  }
+  
+  .transactions-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
   
   .transactions-section h2 {
     display: inline-block;
     margin: 0;
     vertical-align: middle;
+    margin-bottom: 20px;
   }
 
   .export-buttons-wrapper {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 20px;
+    top: 20px;
     display: flex;
-    gap: 12px; /* Space between buttons */
+    gap: 12px;
   }
   
   .export-btn {
-    margin: 0; /* Reset any existing margins */
-    height: 36px; /* Standard Material button height */
+    margin: 0;
+    height: 36px;
     display: flex;
     align-items: center;
     vertical-align: middle;
+    padding: 6px 12px;
+    font-size: 14px;
+    min-width: 120px;
+  }
+
+  .export-btn mat-icon {
+    font-size: 18px; /* Adjust icon size */
   }
 
   .transactions-table {
