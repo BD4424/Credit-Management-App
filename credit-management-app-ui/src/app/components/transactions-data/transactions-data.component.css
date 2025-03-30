@@ -28,14 +28,22 @@
     vertical-align: middle;
   }
 
-  .export-btn {
+  .export-buttons-wrapper {
     position: absolute;
     right: 0;
-    top: 10px;
-    margin-top: -8px;
-    height: 20px;
+    top: 0;
+    display: flex;
+    gap: 12px; /* Space between buttons */
   }
   
+  .export-btn {
+    margin: 0; /* Reset any existing margins */
+    height: 36px; /* Standard Material button height */
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+  }
+
   .transactions-table {
     overflow-x: auto;
   }

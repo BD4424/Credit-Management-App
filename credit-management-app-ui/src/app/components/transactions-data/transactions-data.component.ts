@@ -14,6 +14,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 
 interface Transaction {
   date: Date;
@@ -181,4 +182,31 @@ export class TransactionsDataComponent implements AfterViewInit {
 
   }
 
+  exportToPdf() {
+    const transactionIds = this.dataSource.filteredData.map(t => t.transactionId);
+    const dateFormatter = new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+
+    this.transactionService.exportToPdf(transactionIds).subscribe({
+      next: (pdfBlob: Blob) => {
+        const url = window.URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        const istTime = toZonedTime(new Date(), 'Asia/Kolkata');
+        a.download = `transactions_${format(istTime, 'yyyyMMdd_HHmmss')}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('PDF export failed:', err);
+      }
+    })
+  }
 }
