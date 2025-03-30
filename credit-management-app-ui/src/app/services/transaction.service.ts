@@ -54,4 +54,8 @@ export class TransactionService {
   
     return this.http.get<any[]>(`${this.baseUrl}/getFilteredTransactions`, { params });
   }
+
+  exportToPdf(transactionIds: number[]): Observable<Blob> {
+    return this.http.post(`${this.baseUrl}/export-pdf`,transactionIds, {responseType: 'blob'});
+  }
 }
