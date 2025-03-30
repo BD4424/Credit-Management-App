@@ -8,6 +8,7 @@ import com.creditapp.CreditManagementApp.repository.CustomerRepo;
 import com.creditapp.CreditManagementApp.repository.TransactionRepo;
 import com.creditapp.CreditManagementApp.security.User;
 import com.creditapp.CreditManagementApp.security.UserRepository;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -158,6 +159,23 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionDTOS;
 
+    }
+
+    @Override
+    public byte[] generateTransactionsPdf(List<Integer> transactionIds) {
+
+        List<Transaction> allTransactions = transactionRepo.findAllById(transactionIds);
+        byte[] pdfBytes;
+        try {
+            pdfBytes = PdfExportService.generateTransactionsPdf(allTransactions);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Document could not be created properly.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Pdf generation failed");
+        }
+        return pdfBytes;
     }
 
     @Override

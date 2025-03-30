@@ -8,9 +8,7 @@ import com.creditapp.CreditManagementApp.service.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,5 +97,19 @@ public class TransactionController {
 
 
         return ResponseEntity.ok(transactions);
+    }
+
+    @PostMapping("/export-pdf")
+    public ResponseEntity<byte[]> exportToPdf(@RequestBody List<Integer> transactionIds) {
+        byte[] pdfBytes = transactionService.generateTransactionsPdf(transactionIds);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDisposition(
+                ContentDisposition.builder("attachment")
+                        .filename("transactions_" + System.currentTimeMillis() + ".pdf")
+                        .build());
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 }
