@@ -16,6 +16,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { format } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 import { KpiCardComponent } from '../../shared/components/kpi-card/kpi-card.component';
+import { KPIMetricsService } from '../../services/kpiservice.service';
 
 interface Transaction {
   date: Date;
@@ -66,7 +67,6 @@ export class TransactionsDataComponent implements AfterViewInit {
     { title: 'High-Risk Accounts', value: '12%' } // No trend
   ];
 
-
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
 
@@ -80,7 +80,8 @@ export class TransactionsDataComponent implements AfterViewInit {
 
   constructor(
     private transactionService: TransactionService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private kpiMetricsService: KPIMetricsService
   ) { }
 
   ngAfterViewInit() {
@@ -91,6 +92,18 @@ export class TransactionsDataComponent implements AfterViewInit {
 
   ngOnInit() {
     this.loadAllTransactions();
+    this.KPIMetrics();
+  }
+
+  KPIMetrics(){
+    this.kpiMetricsService.getKPIMetrics().subscribe({
+      next: (data = []) => {
+        this.quickMetrics = data;
+      },
+      error: (err) => {
+        console.error('Failed to fetch KPI metrics');
+      }
+    });
   }
 
   loadAllTransactions() {
