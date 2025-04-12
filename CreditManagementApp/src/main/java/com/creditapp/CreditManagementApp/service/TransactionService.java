@@ -1,5 +1,6 @@
 package com.creditapp.CreditManagementApp.service;
 
+import com.creditapp.CreditManagementApp.DTO.KpiMetrics;
 import com.creditapp.CreditManagementApp.DTO.TransactionDTO;
 import com.creditapp.CreditManagementApp.entity.Transaction;
 
@@ -23,4 +24,7 @@ public interface TransactionService {
     List<TransactionDTO> getFilteredTransactions(LocalDate fromDate, LocalDate toDate, String status, String shopOwner);
 
     byte[] generateTransactionsPdf(List<Integer> transactionIds);
+
+    List<KpiMetrics> getKpiMetrics(String shopOwner);
+
 }

@@ -29,6 +29,9 @@ public class Transaction {
 
     private LocalDateTime date;
 
+    @Column(name = "paid_date")
+    private LocalDateTime paidDate;
+
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
