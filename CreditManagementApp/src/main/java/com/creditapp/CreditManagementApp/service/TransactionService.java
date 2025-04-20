@@ -25,6 +25,5 @@ public interface TransactionService {
 
     byte[] generateTransactionsPdf(List<Integer> transactionIds);
 
-    List<KpiMetrics> getKpiMetrics(String shopOwner);
 
 }

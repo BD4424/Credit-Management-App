@@ -2,6 +2,7 @@ package com.creditapp.CreditManagementApp.controller;
 
 import com.creditapp.CreditManagementApp.DTO.KpiMetrics;
 import com.creditapp.CreditManagementApp.security.JwtUtil;
+import com.creditapp.CreditManagementApp.service.StasticsService;
 import com.creditapp.CreditManagementApp.service.TransactionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,15 @@ public class AnalyticsController {
     @Autowired
     JwtUtil jwtUtil;
 
+    @Autowired
+    StasticsService stasticsService;
+
     @GetMapping("/kpis")
     public List<KpiMetrics> getKpis(HttpServletRequest req) {
 
         String shopOwner = jwtUtil.extractUserNameFromRequest(req);
-        return transactionService.getKpiMetrics(shopOwner);
+        return stasticsService.getKpiMetrics(shopOwner);
     }
+
+
 }
