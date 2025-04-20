@@ -28,6 +28,8 @@ import { format } from 'date-fns';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { NgChartsModule } from 'ng2-charts';
 
 export const routes: Routes = [
     { path: 'customers', component: CustomerListComponent , canActivate: [AuthGuardService]},
@@ -38,7 +40,8 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'transactions', component: TransactionsDataComponent, canActivate: [AuthGuardService]},
     { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: 'signup', component: SignupComponent }
+    { path: 'signup', component: SignupComponent },
+    { path: 'dashboard', component: DashboardComponent }
 ];
 
 
@@ -65,7 +68,8 @@ bootstrapApplication(AppComponent, {
             MatIconModule,
             MatButtonModule, 
             MatTableModule,
-            MatPaginatorModule 
+            MatPaginatorModule,
+            NgChartsModule  
       )
     ]
   });
