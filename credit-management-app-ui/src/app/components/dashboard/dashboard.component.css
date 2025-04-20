@@ -1,0 +1,17 @@
+.chart-container {
+    width: 50vw;           /* 25% of viewport width */
+    height: 50vh;         /* 25% of viewport height */
+    min-width: 250px;     /* Minimum width to prevent becoming too small */
+    min-height: 250px;
+    left: 0;    /* Minimum height to prevent becoming too small */
+    margin: 20px;       /* Center the chart if there's extra space */
+    position: relative;   /* Needed for canvas responsive behavior */
+  }
+  
+  /* Optional: Add some styling to make it look more polished */
+  .chart-container canvas {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+  }
