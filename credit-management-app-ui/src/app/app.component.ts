@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { NgIf } from '@angular/common';
+import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule, NgIf],
+  imports: [RouterOutlet, RouterModule, NgIf, ThemeToggleComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

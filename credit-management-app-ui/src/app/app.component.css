@@ -1,36 +1,107 @@
+/* 🌍 GLOBAL THEME TOGGLE (always visible) */
+.theme-toggle-global {
+  position: fixed;
+  top: 20px;
+  right: 90px; /* offset from the right so it doesn’t overlap logout */
+  z-index: 2000;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.theme-toggle-global:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+/* 🌈 NAVBAR */
 .navbar {
-    background-color: #1976d2;
-    /* Angular Material Blue */
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    box-sizing: border-box;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #1976d2; /* Angular Material blue */
+  color: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Container for navigation links */
+/* 📜 NAVIGATION LINKS */
 .nav-links {
-    display: flex;
-    gap: 15px;
-    /* Space between links */
+  display: flex;
+  gap: 20px;
 }
 
-/* Logout button styling */
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: #bbdefb; /* lighter blue */
+  transform: scale(1.05);
+}
+
+.nav-links a.active {
+  border-bottom: 2px solid #fff;
+  padding-bottom: 2px;
+}
+
+/* 🚪 LOGOUT BUTTON */
 .logout-btn {
-    background-color: #ff5252; /* Red logout button */
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 4px;
+  background-color: #e53935; /* soft red */
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .logout-btn:hover {
-    background-color: #d32f2f; /* Darker red on hover */
+  background-color: #c62828; /* darker red */
+  transform: translateY(-1px);
+}
+
+.logout-btn:active {
+  transform: translateY(1px);
+}
+
+/* 📱 RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .logout-btn {
+    align-self: flex-end;
+  }
+
+  .theme-toggle-global {
+  position: fixed;
+  top: 15px;
+  right: 200px; /* increased gap from right so it stays left of logout */
+  z-index: 2000;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.theme-toggle-global:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
 }

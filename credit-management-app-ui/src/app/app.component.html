@@ -1,16 +1,24 @@
-<nav class="navbar" *ngIf="isLoggedIn()">
-  <div class="nav-links">
-    <a routerLink="/customers" routerLinkActive="active">Customer List</a>
-    <a routerLink="/add-customer" routerLinkActive="active">Add Customer</a>
-    <a routerLink="/transactions" routerLinkActive="active">All Transactions</a>
-    <a routerLink="/reminders" routerLinkActive="active">Reminders</a>
-    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-  </div>
-  <button class="logout-btn"(click)="logout()">Logout</button>
-</nav>
+<div class="theme-toggle-global" *ngIf="!isLoggedIn()">
+  <app-theme-toggle></app-theme-toggle>
+</div>
 
-<!-- <nav *ngIf="!isLoggedIn()">
-  <a routerLink="/login" routerLinkActive="active">Login</a>
-</nav> -->
+<nav class="navbar" *ngIf="isLoggedIn()">
+  <div class="nav-container">
+    <!-- Left: Navigation Links -->
+    <div class="nav-links">
+      <a routerLink="/customers" routerLinkActive="active">Customer List</a>
+      <a routerLink="/add-customer" routerLinkActive="active">Add Customer</a>
+      <a routerLink="/transactions" routerLinkActive="active">All Transactions</a>
+      <a routerLink="/reminders" routerLinkActive="active">Reminders</a>
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+    </div>
+
+    <!-- Right: Theme Toggle + Logout -->
+    <div class="nav-actions">
+      <app-theme-toggle></app-theme-toggle>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</nav>
 
 <router-outlet></router-outlet>
