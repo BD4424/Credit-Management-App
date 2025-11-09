@@ -1,1 +1,13 @@
-<p>kpi-card works!</p>
+<!-- src/app/shared/components/kpi-card/kpi-card.component.html -->
+<mat-card class="kpi-card">
+  <mat-card-header>
+    <mat-card-title class="kpi-title">{{ title }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="kpi-value">
+      {{ value }}
+      <mat-icon *ngIf="trend === 'up'" class="trend-up">trending_up</mat-icon>
+      <mat-icon *ngIf="trend === 'down'" class="trend-down">trending_down</mat-icon>
+    </div>
+  </mat-card-content>
+</mat-card>

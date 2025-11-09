@@ -10,32 +10,8 @@ import { environment } from "../../../../environments/environment";
   selector: 'app-kpi-card',
   standalone: true,
   imports: [MatCardModule, MatIconModule, CommonModule],
-  template: `
-    <mat-card>
-      <mat-card-header>
-        <h3>{{ title }}</h3>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="kpi-value">
-          {{ value }}
-          <mat-icon *ngIf="trend === 'up'" color="warn">arrow_upward</mat-icon>
-          <mat-icon *ngIf="trend === 'down'" color="primary">arrow_downward</mat-icon>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  `,
-  styles: [`
-    mat-card { 
-      width: 200px; 
-      margin: 8px;
-    }
-    .kpi-value { 
-      font-size: 24px; 
-      display: flex; 
-      align-items: center; 
-      gap: 8px;
-    }
-  `]
+  templateUrl: './kpi-card.component.html',
+  styleUrls: ['./kpi-card.component.css']
 })
 export class KpiCardComponent {
   @Input() title!: string;

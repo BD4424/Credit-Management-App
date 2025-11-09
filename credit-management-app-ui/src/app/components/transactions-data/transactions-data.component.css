@@ -1,121 +1,143 @@
+/* src/app/transactions/transactions.component.scss */
+
 .transactions-container {
-    padding: 20px;
-  }
-  
-  .filter-section {
-    margin-bottom: 20px;
-  }
-  
-  .filter-row {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  
-  .apply-btn {
-    margin-right: auto;
-    margin-bottom: auto;
-    margin-top: 10px;
-  }
-  
-  .transactions-section {
-    position: relative;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgb(244, 232, 232);
-    padding: 15px 20px;
-  }
-  
-  .transactions-header {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
-  .transactions-section h2 {
-    display: inline-block;
-    margin: 0;
-    vertical-align: middle;
-    margin-bottom: 20px;
-  }
+  padding: 20px;
+}
 
-  .export-buttons-wrapper {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    display: flex;
-    gap: 12px;
-  }
-  
-  .export-btn {
-    margin: 0;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    vertical-align: middle;
-    padding: 6px 12px;
-    font-size: 14px;
-    min-width: 120px;
-  }
+.filter-section {
+  margin-bottom: 20px;
+}
 
-  .export-btn mat-icon {
-    font-size: 18px; /* Adjust icon size */
-  }
+.filter-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
 
-  .transactions-table {
-    overflow-x: auto;
-  }
-  
-  .mat-table {
-    width: 100%;
-    min-width: 600px;
-  }
-  
-  .mat-paginator {
-    background: transparent;
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
-  }
-  
-  .status-badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-  }
-  
-  .status-badge.paid {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-  }
-  
-  .status-badge.pending {
-    background-color: #fff8e1;
-    color: #ff8f00;
-  }
-  
-  .no-transactions {
-    text-align: center;
-    padding: 40px;
-    color: rgba(0, 0, 0, 0.6);
-  }
-  
-  .no-transactions mat-icon {
-    font-size: 48px;
-    width: 48px;
-    height: 48px;
-    margin-bottom: 16px;
-    color: #3f51b5;
-  }
-  
-  mat-progress-bar {
-    margin-bottom: 20px;
-  }
+.apply-btn {
+  margin-right: auto;
+  margin-bottom: auto;
+  margin-top: 10px;
+}
 
-  .kpi-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap; /* For mobile responsiveness */
-  }
-  
+.transactions-section {
+  position: relative;
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  /* Background will be controlled by dark-theme */
+}
+
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.transactions-section h2 {
+  display: inline-block;
+  margin: 0 0 20px 0;
+  vertical-align: middle;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.export-buttons-wrapper {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  display: flex;
+  gap: 12px;
+}
+
+.export-btn {
+  margin: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  font-size: 14px;
+  min-width: 120px;
+}
+
+.export-btn mat-icon {
+  font-size: 18px;
+}
+
+.transactions-table {
+  overflow-x: auto;
+}
+
+.mat-table {
+  width: 100%;
+  min-width: 600px;
+}
+
+.mat-paginator {
+  background: transparent;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.paid {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.pending {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.no-transactions {
+  text-align: center;
+  padding: 40px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.no-transactions mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: #3f51b5;
+}
+
+mat-progress-bar {
+  margin-bottom: 20px;
+}
+
+.kpi-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+/* DARK MODE OVERRIDES - SCOPED */
+:host-context(body.dark-theme) .transactions-section {
+  background-color: #1e1e1e !important;
+}
+
+:host-context(body.dark-theme) .transactions-section h2 {
+  color: #ffffff !important;
+}
+
+:host-context(body.dark-theme) .filter-section h2 {
+  color: #ffffff !important;
+}
+
+:host-context(body.dark-theme) .no-transactions {
+  color: #bbbbbb !important;
+}
+
+:host-context(body.dark-theme) .no-transactions mat-icon {
+  color: #80bdff !important;
+}
